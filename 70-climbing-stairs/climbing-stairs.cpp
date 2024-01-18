@@ -8,15 +8,19 @@ class Solution {
     }
 public:
     int climbStairs(int n) {
-        vector<int> dp(n + 1, 0);
-        for(int i = 0; i <= n; i++){
-            if(i == 0 || i == 1)dp[i] = 1;
-            else{
-                int oneStep = dp[i - 1];
-                int twoStep = dp[i - 2];
-                dp[i] = oneStep + twoStep;
-            }
+        //vector<int> dp(n + 1, 0);
+        int prev1 = 1, prev2 = 1;
+        for(int i = 2; i <= n; i++){
+            //if(i == 0 || i == 1)dp[i] = 1;
+            
+                //int oneStep = dp[i - 1];
+                //int twoStep = dp[i - 2];
+                int temp = prev1;
+                prev1 = prev2 + prev1;
+                prev2 = temp; 
+                //dp[i] = oneStep + twoStep;
+            
         }
-        return dp[n];
+        return prev1;
     }
 };
