@@ -22,8 +22,25 @@ public:
         
         int n = text1.size();
         int m = text2.size();
-        vector<vector<int>> dp(n, vector<int>(m, -1));
-        int ans = lcs(0, 0, text1, text2, dp);
-        return ans;
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+       
+
+        for(int i = 0; i< n; i++){
+            dp[i][m] = 0;
+        }
+        for(int i = 0; i< m; i++){
+            dp[n][i] = 0;
+        }
+        for(int idx1 = n - 1; idx1 >= 0 ; idx1--){
+            for(int idx2 = m - 1; idx2 >= 0; idx2--){
+                int match = 0;
+                if(text1[idx1] == text2[idx2]){
+                    match = 1 + dp[idx1 + 1][idx2 + 1];
+                }
+                int notMatch = max(dp[idx1 + 1][idx2], dp[idx1][idx2 + 1]);
+                dp[idx1][idx2] = max(match, notMatch);
+            }
+        }
+        return dp[0][0];
     }
 };
