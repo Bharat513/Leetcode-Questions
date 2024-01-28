@@ -9,10 +9,7 @@ public:
             cntMap[it]++;
         }
         int maxi = 0;
-        if(cntMap.size() == 1 && nums[0] == 1){
-            if(cntMap[1] % 2)cntMap[1];
-            else cntMap[1] - 1;
-        }
+       
         if(cntMap.size() <= 1) return 1;
         for(int i = 0; i < n; i++){
             long long temp = nums[i];
