@@ -2,51 +2,56 @@
 #define pi pair<ll,ll>
 
 class Solution {
+    
 public:
-    int mostBooked(int n, vector<vector<int>>& A) {
-        vector<int> roomcnt(n,0);
-        set<int> s;
-        priority_queue<pi,vector<pi>,greater<pi>> q;
-        sort(A.begin(),A.end());
-        int m=A.size();
-        // store available rooms
-        for(int i=0;i<n;i++){
-            s.insert(i);
-        }
-        for(int i=0;i<m;i++){
-            ll start=A[i][0];
-            ll end=A[i][1];
-            // storing available room in set 
-            while(q.size()>0 && q.top().first<=start){
-                int room=q.top().second;
-                q.pop();
-                s.insert(room);
+   int mostBooked(int n, vector<vector<int>>& meetings) {
+        int m = meetings.size();
+        vector<int> freq(n, 0);
+        sort(meetings.begin(), meetings.end());
+
+
+        priority_queue<int, vector<int>, greater<int>> freeRooms;
+        priority_queue<pi, vector<pi>, greater<pi>> occupiedRooms;
+        for(int i = 0; i < n; i++){
+            freeRooms.push(i);
+        } 
+        int maxi = -1, count = 0;
+        for(int i = 0; i < m; i++){
+            int diff = meetings[i][1] - meetings[i][0];
+            while(!occupiedRooms.empty() && meetings[i][0] >= occupiedRooms.top().first){
+                freeRooms.push(occupiedRooms.top().second);
+                occupiedRooms.pop();
             }
-            // delaying the current meeting
-            if(s.size()==0){
-                pair<ll,ll> p=q.top();
-                q.pop();
-                ll dif=end-start;
-                start=p.first;
-                end=start+dif;
-                s.insert(p.second);
+            if(!freeRooms.empty()){
+                occupiedRooms.push({meetings[i][1], freeRooms.top()});
+                int room = freeRooms.top();
+                freq[freeRooms.top()]++;
+                freeRooms.pop();
+                if(freq[room] == count)maxi = min(room, maxi);
+                if(freq[room] > count){
+                    
+                    count = freq[room];
+                    maxi = room;
+                }
+            }else{
+                int room = occupiedRooms.top().second;
+                ll time = occupiedRooms.top().first;
+                ll newTime = time + diff;
+                if(meetings[i][0] > time)newTime = meetings[i][1];
+                occupiedRooms.pop();
+                occupiedRooms.push({newTime, room});
+                freq[room]++;
+                cout<<room<<" "<< freq[room]<<" ";
+                if(freq[room] == count)maxi = min(room, maxi);
+                if(freq[room] > count){
+                    
+                    count = freq[room];
+                    maxi = room;
+                }
             }
-            // lowest number of unsed room available
-            auto it=s.begin(); 
-            roomcnt[*it]++;
-            // assign meeting to lowest avaible room
-            q.push({end,*it});
-            s.erase(*it);
+            
+
         }
-        int ans=0;
-        int maxi=0;
-        // find room with maximum meetings
-        for(int i=0;i<n;i++){
-            if(maxi<roomcnt[i]){
-                maxi=roomcnt[i];
-                ans=i;
-            }
-        }
-        return ans;
+        return maxi;
     }
 };
