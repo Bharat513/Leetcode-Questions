@@ -15,4 +15,4 @@ class Solution:
         for i in st:
             lst.append(i)
 
-        return lst
+        return list(st)
