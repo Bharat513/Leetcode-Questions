@@ -24,7 +24,7 @@ public:
             temp1 = temp1->next;
             cnt++;
         }
-        //del(lower->next);
+        delete(lower->next);
         lower->next = list2;
         ListNode* temp2 = list2;
         while(temp2){
