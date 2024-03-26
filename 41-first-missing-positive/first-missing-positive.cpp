@@ -2,13 +2,15 @@ class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
         int n = nums.size();
-        sort(nums.begin(), nums.end());
-        int number = 1;
+        vector<int> filledNum(n+1, 0);
+        
         for(auto num : nums){
-            if(number == num)number++;
-            else if(number < num)return number;
+            if(num > 0 && num <= n)filledNum[num] = 1;
 
         }
-        return number;
+        for(int i = 1; i < n + 1; i++){
+            if(!filledNum[i])return i;
+        }
+        return n + 1;
     }
 };
